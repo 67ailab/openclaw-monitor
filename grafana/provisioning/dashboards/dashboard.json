@@ -1,0 +1,174 @@
+{
+  "id": null,
+  "uid": "openclaw-monitoring",
+  "title": "OpenClaw Monitoring",
+  "tags": ["openclaw"],
+  "timezone": "browser",
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Total Sessions",
+      "description": "Total number of OpenClaw sessions recorded",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null }
+            ]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_sessions_total", "refId": "A" }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Active Sessions (1h)",
+      "description": "Sessions updated in the last hour",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null }
+            ]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_sessions_active_1h", "refId": "A" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Total Tokens",
+      "description": "Combined input and output tokens across all sessions",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null }
+            ]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "sum(openclaw_tokens_input_total) + sum(openclaw_tokens_output_total)", "refId": "A" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "System Load (1m)",
+      "description": "1-minute load average from host system",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "targets": [
+        { "expr": "node_load1", "legendFormat": "Load 1m", "refId": "A" }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Token Usage by Model",
+      "description": "Cumulative token usage grouped by model",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "targets": [
+        { "expr": "sum by (model) (openclaw_tokens_input_total)", "legendFormat": "Input - {{model}}", "refId": "A" },
+        { "expr": "sum by (model) (openclaw_tokens_output_total)", "legendFormat": "Output - {{model}}", "refId": "B" }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Token Usage by Session",
+      "description": "Cumulative token usage grouped by session",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "targets": [
+        { "expr": "sum by (session) (openclaw_tokens_input_total)", "legendFormat": "Input - {{session}}", "refId": "A" },
+        { "expr": "sum by (session) (openclaw_tokens_output_total)", "legendFormat": "Output - {{session}}", "refId": "B" }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Token Rate (5m avg)",
+      "description": "Rate of token consumption over 5-minute windows",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "targets": [
+        { "expr": "sum(rate(openclaw_tokens_input_total[5m]))", "legendFormat": "Input tokens/sec", "refId": "A" },
+        { "expr": "sum(rate(openclaw_tokens_output_total[5m]))", "legendFormat": "Output tokens/sec", "refId": "B" }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "Memory Usage",
+      "description": "Host memory usage",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "targets": [
+        { "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes", "legendFormat": "Used", "refId": "A" },
+        { "expr": "node_memory_MemAvailable_bytes", "legendFormat": "Available", "refId": "B" }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}
