@@ -36,6 +36,16 @@ python3 exporter.py
 - **Prometheus**: [http://localhost:9090](http://localhost:9090)
 - **Metrics Endpoint**: [http://localhost:8000/metrics](http://localhost:8000/metrics)
 
+## Troubleshooting
+
+### Connection Refused (OpenClaw Metrics)
+If Prometheus shows a `connection refused` error for the `openclaw` target, the custom exporter is likely not running on the host.
+
+To start it:
+```bash
+python3 exporter.py &
+```
+
 ## Configuration
 
 - `prometheus/prometheus.yml`: Prometheus scrape configuration.
