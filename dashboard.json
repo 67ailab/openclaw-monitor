@@ -1,0 +1,40 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "OpenClaw Monitoring",
+    "tags": [ "openclaw" ],
+    "timezone": "browser",
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Total Sessions",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
+        "targets": [ { "expr": "openclaw_sessions_total" } ]
+      },
+      {
+        "type": "stat",
+        "title": "Active Sessions (1h)",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 },
+        "targets": [ { "expr": "openclaw_sessions_active_1h" } ]
+      },
+      {
+        "type": "timeseries",
+        "title": "Token Usage",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+        "targets": [
+          { "expr": "openclaw_tokens_input_total", "legendFormat": "Input" },
+          { "expr": "openclaw_tokens_output_total", "legendFormat": "Output" }
+        ]
+      },
+      {
+        "type": "timeseries",
+        "title": "System Load (1m)",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "targets": [ { "expr": "node_load1" } ]
+      }
+    ],
+    "schemaVersion": 36,
+    "version": 0
+  },
+  "overwrite": true
+}
