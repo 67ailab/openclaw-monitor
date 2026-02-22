@@ -19,7 +19,8 @@ This repository contains the monitoring stack for OpenClaw, including Prometheus
 ### 2. Running the stack
 
 ```bash
-docker-compose up -d
+cd /home/james/monitoring-repo
+docker compose up -d
 ```
 
 ### 3. Custom Exporter
@@ -27,7 +28,7 @@ docker-compose up -d
 The custom exporter (`exporter.py`) runs on the host to access the `openclaw` CLI. It can be started with:
 
 ```bash
-python3 exporter.py
+python3 /home/james/monitoring-repo/exporter.py &
 ```
 
 ## Access
