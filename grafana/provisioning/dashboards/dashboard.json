@@ -11,15 +11,13 @@
       "type": "stat",
       "title": "Total Sessions",
       "description": "Total number of OpenClaw sessions recorded",
-      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
           "thresholds": {
             "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null }
-            ]
+            "steps": [{ "color": "green", "value": null }]
           }
         }
       },
@@ -32,15 +30,13 @@
       "type": "stat",
       "title": "Active Sessions (1h)",
       "description": "Sessions updated in the last hour",
-      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
           "thresholds": {
             "mode": "absolute",
-            "steps": [
-              { "color": "blue", "value": null }
-            ]
+            "steps": [{ "color": "blue", "value": null }]
           }
         }
       },
@@ -52,88 +48,375 @@
       "id": 3,
       "type": "stat",
       "title": "Total Tokens",
-      "description": "Combined input and output tokens across all sessions",
-      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 },
+      "description": "All tokens across all sessions (input + output + cache)",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
           "thresholds": {
             "mode": "absolute",
+            "steps": [{ "color": "purple", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_tokens_total", "refId": "A" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Total Cost",
+      "description": "Total cost in USD across all sessions",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4,
+          "thresholds": {
+            "mode": "absolute",
             "steps": [
-              { "color": "purple", "value": null }
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1 },
+              { "color": "red", "value": 10 }
             ]
           }
         }
       },
       "targets": [
-        { "expr": "sum(openclaw_tokens_input_total) + sum(openclaw_tokens_output_total)", "refId": "A" }
-      ]
-    },
-    {
-      "id": 4,
-      "type": "timeseries",
-      "title": "System Load (1m)",
-      "description": "1-minute load average from host system",
-      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short",
-          "custom": {
-            "lineWidth": 2,
-            "fillOpacity": 10
-          }
-        }
-      },
-      "targets": [
-        { "expr": "node_load1", "legendFormat": "Load 1m", "refId": "A" }
+        { "expr": "openclaw_cost_total_usd", "refId": "A" }
       ]
     },
     {
       "id": 5,
-      "type": "timeseries",
-      "title": "Token Usage by Model",
-      "description": "Cumulative token usage grouped by model",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "type": "stat",
+      "title": "Input Tokens",
+      "description": "Total input tokens",
+      "gridPos": { "h": 4, "w": 2, "x": 16, "y": 0 },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "custom": {
-            "lineWidth": 2,
-            "fillOpacity": 10
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "orange", "value": null }]
           }
         }
       },
       "targets": [
-        { "expr": "sum by (model) (openclaw_tokens_input_total)", "legendFormat": "Input - {{model}}", "refId": "A" },
-        { "expr": "sum by (model) (openclaw_tokens_output_total)", "legendFormat": "Output - {{model}}", "refId": "B" }
+        { "expr": "openclaw_tokens_input_total", "refId": "A" }
       ]
     },
     {
       "id": 6,
-      "type": "timeseries",
-      "title": "Token Usage by Session",
-      "description": "Cumulative token usage grouped by session",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "type": "stat",
+      "title": "Output Tokens",
+      "description": "Total output tokens",
+      "gridPos": { "h": 4, "w": 2, "x": 18, "y": 0 },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "custom": {
-            "lineWidth": 2,
-            "fillOpacity": 10
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "yellow", "value": null }]
           }
         }
       },
       "targets": [
-        { "expr": "sum by (session) (openclaw_tokens_input_total)", "legendFormat": "Input - {{session}}", "refId": "A" },
-        { "expr": "sum by (session) (openclaw_tokens_output_total)", "legendFormat": "Output - {{session}}", "refId": "B" }
+        { "expr": "openclaw_tokens_output_total", "refId": "A" }
       ]
     },
     {
       "id": 7,
+      "type": "stat",
+      "title": "Cache Read",
+      "description": "Total cache read tokens",
+      "gridPos": { "h": 4, "w": 2, "x": 20, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "super-light-blue", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_tokens_cache_read_total", "refId": "A" }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "Cache Write",
+      "description": "Total cache write tokens",
+      "gridPos": { "h": 4, "w": 2, "x": 22, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "light-blue", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_tokens_cache_write_total", "refId": "A" }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "piechart",
+      "title": "Cost Breakdown",
+      "description": "Cost distribution by model and session",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] },
+        "pieType": "pie",
+        "tooltip": { "mode": "single" }
+      },
+      "targets": [
+        { "expr": "openclaw_session_cost_usd", "legendFormat": "{{model}} - {{session}}", "refId": "A" }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "piechart",
+      "title": "Token Breakdown",
+      "description": "Token distribution by type, model, and session",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] },
+        "pieType": "pie",
+        "tooltip": { "mode": "single" }
+      },
+      "targets": [
+        { "expr": "openclaw_session_tokens_input", "legendFormat": "Input - {{model}} - {{session}}", "refId": "A" },
+        { "expr": "openclaw_session_tokens_output", "legendFormat": "Output - {{model}} - {{session}}", "refId": "B" },
+        { "expr": "openclaw_session_tokens_cache_read", "legendFormat": "Cache Read - {{model}} - {{session}}", "refId": "C" },
+        { "expr": "openclaw_session_tokens_cache_write", "legendFormat": "Cache Write - {{model}} - {{session}}", "refId": "D" }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "bargauge",
+      "title": "Cost by Model",
+      "description": "Total cost breakdown by model",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.5 },
+              { "color": "red", "value": 2 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        { "expr": "openclaw_model_cost_usd", "legendFormat": "{{model}}", "refId": "A" }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "bargauge",
+      "title": "Tokens by Model",
+      "description": "Total tokens breakdown by model",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "purple", "value": null }]
+          }
+        }
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        { "expr": "openclaw_model_tokens_input + openclaw_model_tokens_output", "legendFormat": "{{model}}", "refId": "A" }
+      ]
+    },
+    {
+      "id": 13,
       "type": "timeseries",
-      "title": "Token Rate (5m avg)",
-      "description": "Rate of token consumption over 5-minute windows",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
+      "title": "Token Usage by Model",
+      "description": "Token usage over time grouped by model",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 10 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": true
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_model_tokens_input", "legendFormat": "Input - {{model}}", "refId": "A" },
+        { "expr": "openclaw_model_tokens_output", "legendFormat": "Output - {{model}}", "refId": "B" }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Cost Over Time",
+      "description": "Total cost tracked over time",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 10 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": true
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_cost_total_usd", "legendFormat": "Total Cost", "refId": "A" },
+        { "expr": "openclaw_cost_input_usd", "legendFormat": "Input Cost", "refId": "B" },
+        { "expr": "openclaw_cost_output_usd", "legendFormat": "Output Cost", "refId": "C" }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "timeseries",
+      "title": "Cache Token Usage",
+      "description": "Cache read and write tokens over time",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": true
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_tokens_cache_read_total", "legendFormat": "Cache Read", "refId": "A" },
+        { "expr": "openclaw_tokens_cache_write_total", "legendFormat": "Cache Write", "refId": "B" }
+      ]
+    },
+    {
+      "id": 16,
+      "type": "timeseries",
+      "title": "Cost by Model Over Time",
+      "description": "Per-model cost tracked over time",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": true
+          }
+        }
+      },
+      "targets": [
+        { "expr": "openclaw_model_cost_usd", "legendFormat": "{{model}}", "refId": "A" }
+      ]
+    },
+    {
+      "id": 17,
+      "type": "table",
+      "title": "Top Sessions by Cost",
+      "description": "Sessions ranked by cost",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 26 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Value" },
+            "properties": [
+              { "id": "unit", "value": "currencyUSD" },
+              { "id": "decimals", "value": 4 }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [{ "displayName": "Value", "desc": true }]
+      },
+      "transformations": [
+        { "id": "sortBy", "options": { "fields": {}, "sort": [{ "field": "Value", "desc": true }] } }
+      ],
+      "targets": [
+        { "expr": "topk(10, openclaw_session_cost_usd)", "format": "table", "instant": true, "refId": "A" }
+      ]
+    },
+    {
+      "id": 18,
+      "type": "table",
+      "title": "Top Sessions by Tokens",
+      "description": "Sessions ranked by total tokens",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 26 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Value" },
+            "properties": [
+              { "id": "unit", "value": "short" }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [{ "displayName": "Value", "desc": true }]
+      },
+      "transformations": [
+        { "id": "sortBy", "options": { "fields": {}, "sort": [{ "field": "Value", "desc": true }] } }
+      ],
+      "targets": [
+        { "expr": "topk(10, openclaw_session_tokens_input + openclaw_session_tokens_output)", "format": "table", "instant": true, "refId": "A" }
+      ]
+    },
+    {
+      "id": 19,
+      "type": "timeseries",
+      "title": "System Load",
+      "description": "System load averages",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 34 },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
@@ -144,16 +427,17 @@
         }
       },
       "targets": [
-        { "expr": "sum(rate(openclaw_tokens_input_total[5m]))", "legendFormat": "Input tokens/sec", "refId": "A" },
-        { "expr": "sum(rate(openclaw_tokens_output_total[5m]))", "legendFormat": "Output tokens/sec", "refId": "B" }
+        { "expr": "node_load1", "legendFormat": "Load 1m", "refId": "A" },
+        { "expr": "node_load5", "legendFormat": "Load 5m", "refId": "B" },
+        { "expr": "node_load15", "legendFormat": "Load 15m", "refId": "C" }
       ]
     },
     {
-      "id": 8,
+      "id": 20,
       "type": "timeseries",
       "title": "Memory Usage",
       "description": "Host memory usage",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 34 },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
@@ -170,5 +454,5 @@
     }
   ],
   "schemaVersion": 39,
-  "version": 1
+  "version": 2
 }

@@ -54,9 +54,23 @@ docker compose logs -f grafana
 
 ## Metrics Exposed
 
-**Global:** `openclaw_sessions_total`, `openclaw_sessions_active_1h`
+**Session counts:** `openclaw_sessions_total`, `openclaw_sessions_active_1h`
 
-**Per-session (labeled by session and model):** `openclaw_tokens_input_total`, `openclaw_tokens_output_total`
+**Per-session (labeled by session and model):**
+- `openclaw_session_tokens_input`, `openclaw_session_tokens_output`
+- `openclaw_session_tokens_cache_read`, `openclaw_session_tokens_cache_write`
+- `openclaw_session_cost_usd`
+
+**Aggregate totals:**
+- `openclaw_tokens_input_total`, `openclaw_tokens_output_total`, `openclaw_tokens_total`
+- `openclaw_tokens_cache_read_total`, `openclaw_tokens_cache_write_total`
+- `openclaw_cost_total_usd`, `openclaw_cost_input_usd`, `openclaw_cost_output_usd`
+- `openclaw_cost_cache_read_usd`, `openclaw_cost_cache_write_usd`
+
+**Per-model aggregates (labeled by model):**
+- `openclaw_model_tokens_input`, `openclaw_model_tokens_output`
+- `openclaw_model_tokens_cache_read`, `openclaw_model_tokens_cache_write`
+- `openclaw_model_cost_usd`
 
 **System (from node-exporter):** `node_load*`, `node_memory_*`, `node_disk_*`
 
